@@ -1,5 +1,5 @@
 {
-  "name": "mypromise",
+  "name": "@changminjie/promise",
   "version": "1.0.0",
   "description": "a promise polyfill",
   "main": "index.js",
@@ -13,7 +13,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "hhhh"
+    "url": "https://github.com/MinjieChang/Mypromise.git"
   },
   "keywords": [
     "promise",

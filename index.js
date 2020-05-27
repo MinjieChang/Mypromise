@@ -26,7 +26,6 @@ class Mypromise {
   }
 
   static all(ps) {
-    // 我怎么才能知道p的状态变了呢， 也就是当p的状态变了的时候，是不是得加上一个回调
     const pCount = ps.length;
     let count = 0;
     const resultArr = new Array(pCount);
@@ -45,9 +44,6 @@ class Mypromise {
     });
   }
 
-  /*
-   * race
-   */
   static race(ps) {
     return new Mypromise((resolve, reject) => {
       ps.forEach((p) => {
