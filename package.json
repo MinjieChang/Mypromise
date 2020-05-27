@@ -1,0 +1,25 @@
+{
+  "name": "mypromise",
+  "version": "1.0.0",
+  "description": "a promise polyfill",
+  "main": "index.js",
+  "directories": {
+    "test": "jest --bail"
+  },
+  "scripts": {
+    "test": "jest --bail --watchman"
+  },
+  "author": "changminjie",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "hhhh"
+  },
+  "keywords": [
+    "promise",
+    "polyfill"
+  ],
+  "devDependencies": {
+    "jest": "^16"
+  }
+}
