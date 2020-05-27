@@ -176,26 +176,14 @@ class Mypromise {
 
   finally(finallyFn) {
     return new Mypromise((resolve, reject) => {
-      this.finallyCallBacks.push(() => {
+      const fn = () => {
         const result = finallyFn();
         result instanceof Mypromise ? result.then(resolve, reject) : reject(result);
-      });
+      }
+      this.resolveCallBacks.push(fn);
+      this.rejectCallBacks.push(fn);
     });
   }
 }
 
 module.exports = Mypromise
-
-const p = new Promise((resolve, reject) => {
-  resolve(10)
-}).then(data => {
-  console.log(data, '=======')
-  return 20
-}).finally(data => {
-  console.log(data, 'data')
-  return 30
-}).then(data => {
-  console.log(data, '--------')
-})
-
-console.log(p, 'ppppp')
