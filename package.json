@@ -6,6 +6,12 @@
   "directories": {
     "test": "jest --bail"
   },
+  "files": [
+    "src",
+    "dist/*.js",
+    "types/*.d.ts",
+    "index.js"
+  ],
   "scripts": {
     "test": "jest --bail",
     "build": "rollup --config rollup.config.prod.js"
