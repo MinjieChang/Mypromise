@@ -35,7 +35,7 @@ describe('test Promise.all', () => {
     }).catch((data) => {
 
       expect(data).toEqual(['p3'])
-      
+
     })
   })
 

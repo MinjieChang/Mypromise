@@ -1,13 +1,14 @@
 {
   "name": "@changminjie/promise",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "a promise polyfill",
   "main": "index.js",
   "directories": {
     "test": "jest --bail"
   },
   "scripts": {
-    "test": "jest --bail --watchman"
+    "test": "jest --bail",
+    "build": "rollup --config rollup.config.prod.js"
   },
   "author": "changminjie",
   "license": "ISC",
@@ -20,6 +21,19 @@
     "polyfill"
   ],
   "devDependencies": {
-    "jest": "^16"
+    "@babel/core": "^7.10.1",
+    "@babel/plugin-transform-runtime": "^7.10.1",
+    "@babel/preset-env": "^7.10.1",
+    "babel": "^6.23.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^26.0.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-latest": "^6.24.1",
+    "jest": "^23",
+    "rollup": "2.2.0",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-replace": "^2.2.0",
+    "rollup-plugin-uglify": "^6.0.4"
   }
 }
