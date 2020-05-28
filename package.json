@@ -1,6 +1,6 @@
 {
   "name": "@changminjie/promise",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "a promise polyfill",
   "main": "index.js",
   "directories": {
@@ -13,6 +13,9 @@
     "index.js"
   ],
   "scripts": {
+    "patch": "npm version patch",
+    "minor": "npm version minor",
+    "major": "npm version major",
     "test": "jest --bail",
     "build": "rollup --config rollup.config.prod.js"
   },
