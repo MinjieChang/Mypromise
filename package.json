@@ -1,6 +1,6 @@
 {
   "name": "@changminjie/promise",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "description": "a promise polyfill",
   "main": "index.js",
   "directories": {
@@ -18,7 +18,7 @@
     "major": "npm version major",
     "test": "jest --bail",
     "build": "rm -rf dist/*.js && rollup --config rollup.config.prod.js",
-    "publish": "npm run patch && npm publish"
+    "pub": "npm run patch && npm publish"
   },
   "author": "changminjie",
   "license": "ISC",
