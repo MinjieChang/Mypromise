@@ -221,60 +221,61 @@
       }
     }, {
       key: "catch",
-      value: function _catch(catchFn) {
-        var _this3 = this;
+      value: function _catch(resolveFn, catchFn) {
+        catchFn = catchFn || resolveFn; // return new Mypromise((resolve, reject) => {
+        //   // 此处resolve，让后面的finally回调执行
+        //   this.resolveCallBacks.push((...data) => {
+        //     resolve(...data)
+        //   });
+        //   this.rejectCallBacks.push((...data) => {
+        //     try {
+        //       const result = catchFn(...data);
+        //       if (result instanceof Mypromise) {
+        //         result.then(resolve, reject);
+        //       } else {
+        //         reject(result)
+        //       }
+        //     } catch (error) {
+        //       reject(error);
+        //     }
+        //     // result instanceof Mypromise ? result.then(resolve, reject) : reject(result);
+        //   });
+        // });
+        // 方式二
 
-        return new Mypromise(function (resolve, reject) {
-          // 此处resolve，让后面的finally回调执行
-          _this3.resolveCallBacks.push(function () {
-            resolve.apply(void 0, arguments);
-          });
-
-          _this3.rejectCallBacks.push(function () {
-            try {
-              var result = catchFn.apply(void 0, arguments);
-
-              if (result instanceof Mypromise) {
-                result.then(resolve, reject);
-              } else {
-                reject(result);
-              }
-            } catch (error) {
-              reject(error);
-            } // result instanceof Mypromise ? result.then(resolve, reject) : reject(result);
-
-          });
-        }); // 方式二
-        // return this.then((data) => {
-        //   return Mypromise.resolve(data)
-        // }, (err) => {
-        //   return Mypromise.resolve(catchFn(err))
-        // })
+        return this.then(function (data) {
+          return Mypromise.resolve(data);
+        }, function (err) {
+          try {
+            var result = catchFn(err);
+            return Mypromise.resolve(result);
+          } catch (error) {
+            return Mypromise.resolve(error);
+          }
+        });
       }
     }, {
       key: "finally",
-      value: function _finally(finallyFn) {
-        var _this4 = this;
+      value: function _finally(resolveFn, finallyFn) {
+        finallyFn = finallyFn || resolveFn; // return new Mypromise((resolve, reject) => {
+        //   const fn = () => {
+        //     const result = finallyFn();
+        //     result instanceof Mypromise ? result.then(resolve, reject) : resolve(result);
+        //   }
+        //   this.resolveCallBacks.push(fn);
+        //   this.rejectCallBacks.push(fn);
+        // });
+        // 方式二
 
-        return new Mypromise(function (resolve, reject) {
-          var fn = function fn() {
-            var result = finallyFn();
-            result instanceof Mypromise ? result.then(resolve, reject) : reject(result);
-          };
-
-          _this4.resolveCallBacks.push(fn);
-
-          _this4.rejectCallBacks.push(fn);
-        }); // 方式二
-        // return this.then((value) => {
-        //   return Mypromise.resolve(finallyFn()).then(() => {
-        //       return value;
-        //   });
-        //   }, (err) => {
-        //       return Mypromise.resolve(finallyFn()).then(() => {
-        //           throw err;
-        //       });
-        //   });
+        return this.then(function (value) {
+          return Mypromise.resolve(finallyFn()).then(function () {
+            return value;
+          });
+        }, function (err) {
+          return Mypromise.resolve(finallyFn()).then(function () {
+            throw err;
+          });
+        });
       }
     }]);
 

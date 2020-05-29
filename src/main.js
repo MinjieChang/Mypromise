@@ -161,56 +161,69 @@ class Mypromise {
     });
   }
 
-  catch(catchFn) {
-    return new Mypromise((resolve, reject) => {
-      // 此处resolve，让后面的finally回调执行
-      this.resolveCallBacks.push((...data) => {
-        resolve(...data)
-      });
+  catch (resolveFn, catchFn) {
+    catchFn = catchFn || resolveFn;
+    // return new Mypromise((resolve, reject) => {
+    //   // 此处resolve，让后面的finally回调执行
+    //   this.resolveCallBacks.push((...data) => {
+    //     resolve(...data)
+    //   });
 
-      this.rejectCallBacks.push((...data) => {
-        try {
-          const result = catchFn(...data);
-          if (result instanceof Mypromise) {
-            result.then(resolve, reject);
-          } else {
-            reject(result)
-          }
-        } catch (error) {
-          reject(error);
-        }
-        // result instanceof Mypromise ? result.then(resolve, reject) : reject(result);
-      });
-    });
+    //   this.rejectCallBacks.push((...data) => {
+    //     try {
+    //       const result = catchFn(...data);
+    //       if (result instanceof Mypromise) {
+    //         result.then(resolve, reject);
+    //       } else {
+    //         reject(result)
+    //       }
+    //     } catch (error) {
+    //       reject(error);
+    //     }
+    //     // result instanceof Mypromise ? result.then(resolve, reject) : reject(result);
+    //   });
+    // });
 
     // 方式二
-    // return this.then((data) => {
-    //   return Mypromise.resolve(data)
-    // }, (err) => {
-    //   return Mypromise.resolve(catchFn(err))
-    // })
+    return this.then(
+      (data) => {
+        return Mypromise.resolve(data)
+      }, 
+      (err) => {
+        try {
+          const result = catchFn(err)
+          return Mypromise.resolve(result)
+        } catch (error) {
+          return Mypromise.resolve(error)
+        }
+      }
+    )
   }
 
-  finally(finallyFn) {
-    return new Mypromise((resolve, reject) => {
-      const fn = () => {
-        const result = finallyFn();
-        result instanceof Mypromise ? result.then(resolve, reject) : reject(result);
-      }
-      this.resolveCallBacks.push(fn);
-      this.rejectCallBacks.push(fn);
-    });
+  finally(resolveFn, finallyFn) {
+    finallyFn = finallyFn || resolveFn;
+    // return new Mypromise((resolve, reject) => {
+    //   const fn = () => {
+    //     const result = finallyFn();
+    //     result instanceof Mypromise ? result.then(resolve, reject) : resolve(result);
+    //   }
+    //   this.resolveCallBacks.push(fn);
+    //   this.rejectCallBacks.push(fn);
+    // });
 
     // 方式二
-    // return this.then((value) => {
-    //   return Mypromise.resolve(finallyFn()).then(() => {
-    //       return value;
-    //   });
-    //   }, (err) => {
-    //       return Mypromise.resolve(finallyFn()).then(() => {
-    //           throw err;
-    //       });
-    //   });
+    return this.then(
+      (value) => {
+        return Mypromise.resolve(finallyFn()).then(() => {
+            return value;
+        });
+      },
+      (err) => {
+        return Mypromise.resolve(finallyFn()).then(() => {
+          throw err;
+        });
+      }
+    );
   }
 }
 
