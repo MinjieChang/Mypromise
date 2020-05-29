@@ -210,7 +210,8 @@
               if (result instanceof Mypromise) {
                 // 需要由result来接管后面的then回调
                 result.then(resolve, reject);
-              } else {// reject(result)
+              } else {
+                reject(result);
               }
             } catch (error) {
               reject(error);
@@ -224,11 +225,31 @@
         var _this3 = this;
 
         return new Mypromise(function (resolve, reject) {
-          _this3.rejectCallBacks.push(function () {
-            var result = catchFn.apply(void 0, arguments);
-            result instanceof Mypromise ? result.then(resolve, reject) : reject(result);
+          // 此处resolve，让后面的finally回调执行
+          _this3.resolveCallBacks.push(function () {
+            resolve.apply(void 0, arguments);
           });
-        });
+
+          _this3.rejectCallBacks.push(function () {
+            try {
+              var result = catchFn.apply(void 0, arguments);
+
+              if (result instanceof Mypromise) {
+                result.then(resolve, reject);
+              } else {
+                reject(result);
+              }
+            } catch (error) {
+              reject(error);
+            } // result instanceof Mypromise ? result.then(resolve, reject) : reject(result);
+
+          });
+        }); // 方式二
+        // return this.then((data) => {
+        //   return Mypromise.resolve(data)
+        // }, (err) => {
+        //   return Mypromise.resolve(catchFn(err))
+        // })
       }
     }, {
       key: "finally",
@@ -244,7 +265,16 @@
           _this4.resolveCallBacks.push(fn);
 
           _this4.rejectCallBacks.push(fn);
-        });
+        }); // 方式二
+        // return this.then((value) => {
+        //   return Mypromise.resolve(finallyFn()).then(() => {
+        //       return value;
+        //   });
+        //   }, (err) => {
+        //       return Mypromise.resolve(finallyFn()).then(() => {
+        //           throw err;
+        //       });
+        //   });
       }
     }]);
 

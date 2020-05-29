@@ -6,27 +6,58 @@ jest.autoMockOff();
 describe('test promise state', () => {
   const p1 = new Mypromise((resolve, reject) => {
     setTimeout(() => {
-      resolve(200);
-      reject(200);
+      resolve(100);
+      reject(100);
     }, 100);
   })
 
   test('test promise state resolved', (done) => {
     p1.then(data => {
-      expect(data).toEqual(200)
+      expect(data).toEqual(100)
       done()
     })
   })
 
   const p2 = new Mypromise((resolve, reject) => {
     setTimeout(() => {
-      reject(300);
-    }, 100);
+      reject(200);
+    }, 1000);
   });
 
   test('test promise state rejected', (done) => {
     p2.catch(err => {
-      expect(err).toEqual(300)
+      expect(err).toEqual(200)
+      done()
+    })
+  })
+
+  const p3 = new Mypromise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(300);
+    }, 2000);
+  });
+
+  test('test promise reach finally after resolve', (done) => {
+    p3.then(data => {
+      expect(data).toEqual(300)
+    })
+    .finally(() => {
+      done()
+    })
+  })
+
+  const p4 = new Mypromise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(400);
+    }, 3000);
+  });
+
+  test('test promise reach finally after reject', (done) => {
+    p4.then(data => {
+      expect(data).toEqual(300)
+    }).catch(err => {
+      expect(err).toEqual(400)
+    }).finally(() => {
       done()
     })
   })

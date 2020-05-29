@@ -152,7 +152,7 @@ class Mypromise {
             // 需要由result来接管后面的then回调
             result.then(resolve, reject);
           } else {
-            // reject(result)
+            reject(result)
           }
         } catch (error) {
           reject(error);
@@ -163,11 +163,32 @@ class Mypromise {
 
   catch(catchFn) {
     return new Mypromise((resolve, reject) => {
+      // 此处resolve，让后面的finally回调执行
+      this.resolveCallBacks.push((...data) => {
+        resolve(...data)
+      });
+
       this.rejectCallBacks.push((...data) => {
-        const result = catchFn(...data);
-        result instanceof Mypromise ? result.then(resolve, reject) : reject(result);
+        try {
+          const result = catchFn(...data);
+          if (result instanceof Mypromise) {
+            result.then(resolve, reject);
+          } else {
+            reject(result)
+          }
+        } catch (error) {
+          reject(error);
+        }
+        // result instanceof Mypromise ? result.then(resolve, reject) : reject(result);
       });
     });
+
+    // 方式二
+    // return this.then((data) => {
+    //   return Mypromise.resolve(data)
+    // }, (err) => {
+    //   return Mypromise.resolve(catchFn(err))
+    // })
   }
 
   finally(finallyFn) {
@@ -179,6 +200,17 @@ class Mypromise {
       this.resolveCallBacks.push(fn);
       this.rejectCallBacks.push(fn);
     });
+
+    // 方式二
+    // return this.then((value) => {
+    //   return Mypromise.resolve(finallyFn()).then(() => {
+    //       return value;
+    //   });
+    //   }, (err) => {
+    //       return Mypromise.resolve(finallyFn()).then(() => {
+    //           throw err;
+    //       });
+    //   });
   }
 }
 
