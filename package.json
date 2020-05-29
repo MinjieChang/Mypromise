@@ -1,6 +1,6 @@
 {
   "name": "@changminjie/promise",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "a promise polyfill",
   "main": "index.js",
   "directories": {
