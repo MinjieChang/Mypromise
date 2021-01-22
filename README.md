@@ -26,7 +26,8 @@ npm test
 ```
 3、使用
 ```shell
-npm install @cmj/Promise
+npm install @changminjie/promise
 
+# add to file where used
 import Mypromise from '@changminjie/promise'
 ```
